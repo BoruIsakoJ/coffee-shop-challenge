@@ -14,8 +14,9 @@ class Customer:
             self._name = name
             
         else:
-            raise Exception("Customer name must be a string and should be between 1-15 characters")
+            raise ValueError("Customer name must be a string and should be between 1-15 characters")
 
+    @property
     def orders(self):
         return self._orders
     
@@ -24,7 +25,18 @@ class Customer:
   
     def create_order(self, coffee, price):
         from order import Order
-        return Order(self, coffee, price)
-    
+        return Order(customer=self, coffee=coffee,price=price)
+   
+    @classmethod
+    def most_aficionado(cls, coffee):
+        if not coffee._orders:
+            return None
+        spending = {}
+        for order in coffee._orders:
+            customer = order.customer
+            spending[customer] = spending.get(customer, 0) + order.price
+        return max(spending, key=spending.get)
+   
+ 
 # customer1 = Customer("Boru")
 # print(customer1.name)
